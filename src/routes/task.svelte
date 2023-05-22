@@ -1,22 +1,23 @@
 <script>
-	import { writable } from "svelte/store";
 	import "carbon-components-svelte/css/all.css";
 	import {
 		Checkbox,
 		Button,
 		TextInput,
 		Theme,
-		Toggle,
 		LocalStorage,
 	} from "carbon-components-svelte";
 	import Add from "carbon-icons-svelte/lib/Add.svelte";
 	import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
-
-	let theme = "g90";
+	import Settings from "carbon-icons-svelte/lib/Settings.svelte";
+	import { themeValue } from "./stores.svelte";
+	let theme;
+	themeValue.subscribe((value) => {
+		theme = value;
+	});
 	let newTask;
 	let tasks = [];
 	let isInvalid = false;
-	let toggled = false;
 	let events = [];
 
 	// $: theme = toggled ? "g90" : "white";
@@ -47,15 +48,6 @@
 		}
 	}
 
-	function ThemeSwitch() {
-		if (theme == "g90") {
-			theme = "white";
-		} else {
-			theme = "g90";
-		}
-		console.log("here");
-	}
-
 	function ClearCompleted() {
 		tasks = tasks.filter((task) => !task.isCompleted);
 	}
@@ -82,15 +74,23 @@
 			events = [...events, { event: "on:update", detail }];
 		}}
 	/>
-
-	<TextInput
-		bind:value={newTask}
-		on:keydown={handleKeyDown}
-		invalid={isInvalid}
-		invalidText="You cannot add duplicate tasks"
-		placeholder="Enter task description..."
-		style="width: 600px"
-	/>
+	<div class="flex-box">
+		<TextInput
+			bind:value={newTask}
+			on:keydown={handleKeyDown}
+			invalid={isInvalid}
+			invalidText="You cannot add duplicate tasks"
+			placeholder="Enter task description..."
+			style="width: 600px"
+		/>
+		<Button
+			iconDescription="Settings"
+			icon={Settings}
+			href="/settings"
+			kind="ghost"
+			size={32}
+		/>
+	</div>
 	<br />
 
 	<Button on:click={AddTask} icon={Add} size="small">Add task</Button>
@@ -162,3 +162,10 @@
 		<br />
 	</ul>
 </Theme>
+
+<style>
+	div.flex-box {
+		display: flex;
+		justify-content: space-between;
+	}
+</style>

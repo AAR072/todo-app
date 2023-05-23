@@ -1,5 +1,5 @@
 <script>
 	import Task from "./task.svelte";
 </script>
-<title>TODO List</title>
+<title>Tasks</title>
 <Task />

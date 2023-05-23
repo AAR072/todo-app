@@ -1,13 +1,8 @@
 <script>
 	import {
 		Header,
-		HeaderNav,
-		HeaderNavItem,
-		HeaderNavMenu,
 		SideNav,
 		SideNavItems,
-		SideNavMenu,
-		SideNavMenuItem,
 		SideNavLink,
 		SkipToContent,
 		Content,
@@ -15,7 +10,20 @@
 		Row,
 		Column,
 	} from "carbon-components-svelte";
+	import { Loading } from "carbon-components-svelte";
 	import { onMount } from "svelte";
+
+	import "carbon-components-svelte/css/all.css";
+	import {
+		Checkbox,
+		Button,
+		TextInput,
+		Theme,
+		LocalStorage,
+	} from "carbon-components-svelte";
+	import Add from "carbon-icons-svelte/lib/Add.svelte";
+	import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
+	import { themeValue } from "./stores.svelte";
 	let isLoading = true;
 
 	onMount(() => {
@@ -30,19 +38,6 @@
 		}
 	});
 	let isSideNavOpen = false;
-
-	import "carbon-components-svelte/css/all.css";
-	import {
-		Checkbox,
-		Button,
-		TextInput,
-		Theme,
-		LocalStorage,
-	} from "carbon-components-svelte";
-	import Add from "carbon-icons-svelte/lib/Add.svelte";
-	import TrashCan from "carbon-icons-svelte/lib/TrashCan.svelte";
-	import Settings from "carbon-icons-svelte/lib/Settings.svelte";
-	import { themeValue } from "./stores.svelte";
 	let theme;
 	themeValue.subscribe((value) => {
 		theme = value;
@@ -52,11 +47,9 @@
 	let isInvalid = false;
 	let events = [];
 
-	// $: theme = toggled ? "g90" : "white";
-
 	function ChangeCompletionStatus(index) {
 		tasks[index].isCompleted = !tasks[index].isCompleted;
-		tasks = [...tasks]; // Trigger reactivity
+		tasks = [...tasks];
 	}
 
 	function DeleteTask(index) {
@@ -65,7 +58,6 @@
 
 	function AddTask() {
 		if (newTask.trim() !== "") {
-			// Check if task with the same description already exists
 			const existingTask = tasks.find(
 				(task) => task.description === newTask
 			);
@@ -89,24 +81,25 @@
 
 	function handleKeyDown(event) {
 		if (event.key === "Enter") {
-			event.preventDefault(); // Prevent form submission
+			event.preventDefault();
 			AddTask();
 		}
 	}
 </script>
+
 <LocalStorage
-key="theme-value"
-bind:value={theme}
-on:save={() => {
-	events = [...events, { event: "on:save" }];
-}}
-on:update={({ detail }) => {
-	events = [...events, { event: "on:update", detail }];
-}}
+	key="theme-value"
+	bind:value={theme}
+	on:save={() => {
+		events = [...events, { event: "on:save" }];
+	}}
+	on:update={({ detail }) => {
+		events = [...events, { event: "on:update", detail }];
+	}}
 />
 <Theme bind:theme>
 	{#if isLoading}
-		<div>Loading...</div>
+		<Loading description="Loading..." />
 	{:else}
 		<Header
 			persistentHamburgerMenu={true}
@@ -156,8 +149,6 @@ on:update={({ detail }) => {
 						<Button on:click={AddTask} icon={Add} size="small"
 							>Add task</Button
 						>
-
-						<!-- <Toggle size="sm" bind:toggled labelA="Light Mode" labelB="Dark Mode" style="margin-right: 100px"/> -->
 
 						<br />
 						<br />
@@ -223,9 +214,7 @@ on:update={({ detail }) => {
 								{/if}
 							{/each}
 							<br />
-							<Button
-								on:click={ClearCompleted}
-								kind="tertiary"
+							<Button on:click={ClearCompleted} kind="tertiary"
 								>Clear Completed Tasks</Button
 							>
 							<br />
@@ -238,15 +227,14 @@ on:update={({ detail }) => {
 </Theme>
 
 <style>
+	@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap");
 	div.flex-box {
 		display: flex;
 		justify-content: space-between;
 	}
-	@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap");
-	
+
 	:global(body) {
 		font-family: "Lexend Deca", sans-serif;
 		font-size: 1.5rem;
-
 	}
 </style>

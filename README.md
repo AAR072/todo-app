@@ -4,6 +4,8 @@
 Task app is an easy to use app to quickly set goals for yourself. Made in [Svelte](https://svelte.dev/).    
 Github repo: [AAR072/todo-app](https://github.com/AAR072/todo-app/)
 
+[View website](https://task-master.pages.dev/)
+
 ## Feedback
 
 If you have any feedback, create an issue at https://github.com/AAR072/todo-app/issues

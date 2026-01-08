@@ -1,3 +1,6 @@
+# Context
+This was my first svelte app. I have archived it but am keeping it for nostalgia.
+
 
 # TaskApp
 
